@@ -1,0 +1,18 @@
+@import "tailwindcss";
+
+@theme {
+  --color-tag-sweep: #3B82F6;
+  --color-tag-submission: #EF4444;
+  --color-tag-pass: #10B981;
+  --color-tag-escape: #F59E0B;
+  --color-tag-transition: #8B5CF6;
+}
+
+/* React Flow styles */
+.react-flow__node {
+  cursor: pointer;
+}
+
+.react-flow__edge {
+  cursor: pointer;
+}
