@@ -69,7 +69,34 @@ npm run dev
 
 4. Open your browser to `http://localhost:5173`
 
-## Building for Production
+## Deployment
+
+### Deploy to Azure (Recommended)
+
+Deploy this app to Azure Static Web Apps for **free** hosting with global CDN, automatic SSL, and CI/CD!
+
+**Quick Start** (10 minutes):
+1. Sign up for [Azure Free Account](https://azure.microsoft.com/free/)
+2. Create a Static Web App in Azure Portal
+3. Connect to this GitHub repository
+4. Azure automatically deploys your app!
+
+📖 **Detailed Guides**:
+- [Quick Start Guide](docs/AZURE_QUICK_START.md) - Get deployed in 10 minutes
+- [Full Deployment Guide](docs/AZURE_DEPLOYMENT_GUIDE.md) - Step-by-step instructions
+- [Architecture Overview](docs/AZURE_ARCHITECTURE.md) - Technical architecture details
+- [Cost Estimation](docs/AZURE_COST_ESTIMATION.md) - Pricing breakdown ($0/month for 5-100 users!)
+
+**What You Get**:
+- ✅ Free hosting for 5-100+ users
+- ✅ Global CDN with SSL certificate
+- ✅ Auto-deploy on git push
+- ✅ Staging environments for PRs
+- ✅ Custom domain support
+
+**Cost**: $0/month on Free Tier (perfect for beta testing)
+
+### Building for Production
 
 ```bash
 npm run build
