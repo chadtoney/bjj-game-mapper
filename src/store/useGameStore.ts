@@ -85,6 +85,20 @@ export const useGameStore = create<GameMapState & {
     get().saveToStorage();
   },
 
+  duplicateNode: (id) => {
+    const node = get().nodes.find((n) => n.id === id);
+    if (!node) return;
+    const newNode: PositionNode = {
+      ...node,
+      id: `node-${Date.now()}`,
+      position: { x: node.position.x + 50, y: node.position.y + 50 },
+      data: { ...node.data, label: `${node.data.label} (copy)` },
+      selected: false,
+    };
+    set({ nodes: [...get().nodes, newNode] });
+    get().saveToStorage();
+  },
+
   setNodes: (nodes) => {
     set({ nodes });
     get().saveToStorage();
@@ -111,6 +125,17 @@ export const useGameStore = create<GameMapState & {
     set({
       edges: get().edges.filter((edge) => edge.id !== id),
       selectedEdgeId: get().selectedEdgeId === id ? null : get().selectedEdgeId,
+    });
+    get().saveToStorage();
+  },
+
+  reverseEdge: (id) => {
+    set({
+      edges: get().edges.map((edge) =>
+        edge.id === id
+          ? { ...edge, source: edge.target, target: edge.source }
+          : edge
+      ),
     });
     get().saveToStorage();
   },

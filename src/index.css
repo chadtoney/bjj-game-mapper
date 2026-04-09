@@ -16,3 +16,32 @@
 .react-flow__edge {
   cursor: pointer;
 }
+
+/* Context menu radial items animation */
+@keyframes context-menu-pop {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  80% {
+    transform: scale(1.08);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.context-menu-item {
+  animation: context-menu-pop 0.2s ease-out both;
+}
+
+.context-menu-overlay {
+  animation: fade-in 0.1s ease-out both;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}

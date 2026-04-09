@@ -46,12 +46,14 @@ export interface GameMapState {
   addNode: (position: { x: number; y: number }, label: string) => void;
   updateNode: (id: string, data: Partial<PositionNode['data']>) => void;
   deleteNode: (id: string) => void;
+  duplicateNode: (id: string) => void;
   setNodes: (nodes: PositionNode[]) => void;
   
   // Edge actions
   addEdge: (edge: TransitionEdge) => void;
   updateEdge: (id: string, data: Partial<TransitionEdge['data']>) => void;
   deleteEdge: (id: string) => void;
+  reverseEdge: (id: string) => void;
   setEdges: (edges: TransitionEdge[]) => void;
   
   // Tag actions
