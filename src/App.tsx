@@ -2,6 +2,7 @@ import { ReactFlowProvider } from 'reactflow';
 import MindMap from './components/MindMap/MindMap';
 import Sidebar from './components/Sidebar/Sidebar';
 import ExportImport from './components/Controls/ExportImport';
+import UndoRedo from './components/Controls/UndoRedo';
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
         <div className="flex-1 relative">
           <MindMap />
           <ExportImport />
+          <UndoRedo />
         </div>
       </div>
     </ReactFlowProvider>

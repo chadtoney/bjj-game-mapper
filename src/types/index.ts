@@ -33,6 +33,13 @@ export type TransitionEdge = Edge & {
   };
 };
 
+// Snapshot for undo/redo stack
+export interface UndoSnapshot {
+  nodes: PositionNode[];
+  edges: TransitionEdge[];
+  tags: Tag[];
+}
+
 // Store state interface
 export interface GameMapState {
   nodes: PositionNode[];
@@ -41,6 +48,10 @@ export interface GameMapState {
   selectedNodeId: string | null;
   selectedEdgeId: string | null;
   filterTags: string[];
+  
+  // Undo/redo state
+  undoStack: UndoSnapshot[];
+  redoStack: UndoSnapshot[];
   
   // Node actions
   addNode: (position: { x: number; y: number }, label: string) => void;
@@ -64,6 +75,12 @@ export interface GameMapState {
   
   // Filter actions
   setFilterTags: (tags: string[]) => void;
+  
+  // Undo/redo actions
+  undo: () => void;
+  redo: () => void;
+  canUndo: () => boolean;
+  canRedo: () => boolean;
   
   // Persistence actions
   exportData: () => string;
