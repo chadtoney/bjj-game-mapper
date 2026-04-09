@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useGameStore } from '../../store/useGameStore';
+import PositionContextHints from './PositionContextHints';
 
 const NodeEditor = () => {
   const { nodes, selectedNodeId, updateNode, setSelectedNode, tags } = useGameStore();
@@ -65,6 +66,8 @@ const NodeEditor = () => {
             placeholder="e.g., Closed Guard"
           />
         </div>
+
+        <PositionContextHints positionName={label} />
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
