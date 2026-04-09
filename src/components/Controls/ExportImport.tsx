@@ -41,21 +41,21 @@ const ExportImport = () => {
     <div className="fixed bottom-4 right-4 flex flex-col gap-2 bg-white p-3 rounded-lg shadow-lg border border-gray-200">
       <button
         onClick={handleExport}
-        className="px-4 py-2 bg-green-600 text-white rounded-lg font-medium hover:bg-green-700 transition-colors text-sm"
+        className="px-4 py-2 bg-green-600 text-white rounded-lg font-medium hover:bg-green-700 transition-colors text-sm min-h-[44px] min-w-[44px]"
         title="Export game map to JSON file"
       >
         📥 Export
       </button>
       <button
         onClick={handleImport}
-        className="px-4 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors text-sm"
+        className="px-4 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors text-sm min-h-[44px] min-w-[44px]"
         title="Import game map from JSON file"
       >
         📤 Import
       </button>
       <button
         onClick={handleClear}
-        className="px-4 py-2 bg-red-600 text-white rounded-lg font-medium hover:bg-red-700 transition-colors text-sm"
+        className="px-4 py-2 bg-red-600 text-white rounded-lg font-medium hover:bg-red-700 transition-colors text-sm min-h-[44px] min-w-[44px]"
         title="Clear all positions and transitions"
       >
         🗑️ Clear All

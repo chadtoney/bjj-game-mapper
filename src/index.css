@@ -16,3 +16,18 @@
 .react-flow__edge {
   cursor: pointer;
 }
+
+/* Increase handle tap targets to 44px minimum per iOS/Android guidelines */
+.react-flow__handle {
+  position: relative;
+}
+
+.react-flow__handle::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  min-width: 44px;
+  min-height: 44px;
+  transform: translate(-50%, -50%);
+}
