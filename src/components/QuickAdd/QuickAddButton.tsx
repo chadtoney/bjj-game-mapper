@@ -14,7 +14,7 @@ const QuickAddButton = () => {
   const searchRef = useRef<HTMLInputElement>(null);
   const edgeCounter = useRef(0);
 
-  const { nodes, addEdge, setSelectedEdge, tags } = useGameStore();
+  const { nodes, edges, addEdge, setSelectedEdge, tags } = useGameStore();
 
   const handleClose = useCallback(() => {
     setIsOpen(false);
@@ -48,8 +48,8 @@ const QuickAddButton = () => {
     if (!sourceId || !targetId) return;
 
     const defaultTag = tags.find((t) => t.type === technique.defaultTag);
-    edgeCounter.current += 1;
-    const edgeId = `e${sourceId}-${targetId}-${edgeCounter.current}`;
+    edgeCounter.current = Math.max(edgeCounter.current + 1, edges.length + 1);
+    const edgeId = `eq${sourceId}-${targetId}-${edgeCounter.current}`;
 
     const newEdge: TransitionEdge = {
       id: edgeId,
