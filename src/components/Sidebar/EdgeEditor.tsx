@@ -91,7 +91,7 @@ const EdgeEditor = () => {
                   onClick={() => toggleTag(tag.id)}
                   className={`px-2 py-1 rounded text-xs font-medium transition-all ${
                     isSelected
-                      ? 'text-white'
+                      ? 'text-gray-800 border border-gray-300'
                       : 'text-gray-700 bg-gray-100 hover:bg-gray-200'
                   }`}
                   style={isSelected ? { backgroundColor: tag.color } : {}}

@@ -4,6 +4,7 @@ import ReactFlow, {
   Controls,
   MiniMap,
   Panel,
+  useReactFlow,
   type NodeTypes,
   type EdgeTypes,
   type Node,
@@ -14,6 +15,7 @@ import 'reactflow/dist/style.css';
 import { useGameStore } from '../../store/useGameStore';
 import PositionNode from './PositionNode';
 import TransitionEdge from './TransitionEdge';
+import Legend from './Legend';
 
 const nodeTypes: NodeTypes = {
   positionNode: PositionNode,
@@ -35,6 +37,8 @@ const MindMap = () => {
     addNode,
     loadFromStorage,
   } = useGameStore();
+
+  const reactFlowInstance = useReactFlow();
 
   // Load data from storage on mount
   useEffect(() => {
@@ -62,22 +66,16 @@ const MindMap = () => {
 
   const onPaneDoubleClick = useCallback(
     (event: React.MouseEvent) => {
-      const reactFlowBounds = (event.target as HTMLElement)
-        .closest('.react-flow')
-        ?.getBoundingClientRect();
-
-      if (reactFlowBounds) {
-        const position = {
-          x: event.clientX - reactFlowBounds.left - 75,
-          y: event.clientY - reactFlowBounds.top - 25,
-        };
-        const label = prompt('Enter position name:');
-        if (label) {
-          addNode(position, label);
-        }
+      const position = reactFlowInstance.screenToFlowPosition({
+        x: event.clientX,
+        y: event.clientY,
+      });
+      const label = prompt('Enter position name:');
+      if (label) {
+        addNode(position, label);
       }
     },
-    [addNode]
+    [addNode, reactFlowInstance]
   );
 
   return (
@@ -97,11 +95,29 @@ const MindMap = () => {
         fitView
         attributionPosition="bottom-right"
       >
+        {/* SVG arrow marker definition */}
+        <svg>
+          <defs>
+            <marker
+              id="arrowhead"
+              viewBox="0 0 10 10"
+              refX="10"
+              refY="5"
+              markerWidth="8"
+              markerHeight="8"
+              orient="auto-start-reverse"
+            >
+              <path d="M 0 0 L 10 5 L 0 10 Z" fill="#6B7280" />
+            </marker>
+          </defs>
+        </svg>
         <Background />
         <Controls />
         <MiniMap
           nodeColor={(node) => {
             if (node.selected) return '#3B82F6';
+            const data = node.data as { tags?: { color: string }[] };
+            if (data?.tags?.[0]?.color) return data.tags[0].color;
             return '#E5E7EB';
           }}
           className="!bg-gray-50 !border-gray-300"
@@ -111,8 +127,11 @@ const MindMap = () => {
             💡 Double-click canvas to add position
           </div>
           <div className="text-xs text-gray-600 mt-1">
-            Drag from node edge to create connection
+            Drag from node handle to create connection
           </div>
+        </Panel>
+        <Panel position="top-right">
+          <Legend />
         </Panel>
       </ReactFlow>
     </div>

@@ -1,7 +1,7 @@
 import type { Node, Edge } from 'reactflow';
 
 // Tag types for categorizing positions and transitions
-export type TagType = 'sweep' | 'submission' | 'pass' | 'escape' | 'transition' | 'custom';
+export type TagType = 'sweep' | 'submission' | 'pass' | 'escape' | 'transition' | 'takedown' | 'position' | 'custom';
 
 // Tag interface
 export interface Tag {
@@ -74,9 +74,11 @@ export interface GameMapState {
 
 // Default tag definitions
 export const DEFAULT_TAGS: Tag[] = [
-  { id: 'sweep', name: 'Sweep', type: 'sweep', color: '#3B82F6' },
-  { id: 'submission', name: 'Submission', type: 'submission', color: '#EF4444' },
-  { id: 'pass', name: 'Pass', type: 'pass', color: '#10B981' },
-  { id: 'escape', name: 'Escape', type: 'escape', color: '#F59E0B' },
-  { id: 'transition', name: 'Transition', type: 'transition', color: '#8B5CF6' },
+  { id: 'position', name: 'Position', type: 'position', color: '#6EE7B7' },
+  { id: 'sweep', name: 'Sweep', type: 'sweep', color: '#93C5FD' },
+  { id: 'submission', name: 'Submission', type: 'submission', color: '#FCA5A5' },
+  { id: 'pass', name: 'Pass', type: 'pass', color: '#C4B5FD' },
+  { id: 'escape', name: 'Escape', type: 'escape', color: '#FDE68A' },
+  { id: 'transition', name: 'Transition', type: 'transition', color: '#D1D5DB' },
+  { id: 'takedown', name: 'Takedown', type: 'takedown', color: '#FDBA74' },
 ];

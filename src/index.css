@@ -1,11 +1,13 @@
 @import "tailwindcss";
 
 @theme {
-  --color-tag-sweep: #3B82F6;
-  --color-tag-submission: #EF4444;
-  --color-tag-pass: #10B981;
-  --color-tag-escape: #F59E0B;
-  --color-tag-transition: #8B5CF6;
+  --color-tag-sweep: #93C5FD;
+  --color-tag-submission: #FCA5A5;
+  --color-tag-pass: #C4B5FD;
+  --color-tag-escape: #FDE68A;
+  --color-tag-transition: #D1D5DB;
+  --color-tag-position: #6EE7B7;
+  --color-tag-takedown: #FDBA74;
 }
 
 /* React Flow styles */
@@ -15,4 +17,20 @@
 
 .react-flow__edge {
   cursor: pointer;
+}
+
+/* Make handles visible on hover for easy connection */
+.react-flow__handle {
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.react-flow__node:hover .react-flow__handle,
+.react-flow__handle:hover {
+  opacity: 1;
+}
+
+/* While connecting, show all handles */
+.react-flow__node.connecting .react-flow__handle {
+  opacity: 1;
 }

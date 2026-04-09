@@ -39,7 +39,7 @@ const PositionList = () => {
                     {node.data.tags.slice(0, 3).map((tag) => (
                       <span
                         key={tag.id}
-                        className="px-1.5 py-0.5 rounded text-xs font-medium text-white"
+                        className="px-1.5 py-0.5 rounded text-xs font-medium text-gray-800 border border-gray-300"
                         style={{ backgroundColor: tag.color }}
                       >
                         {tag.name}
