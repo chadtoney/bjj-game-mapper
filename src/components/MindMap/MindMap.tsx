@@ -92,6 +92,7 @@ const MindMap = () => {
     [addNode]
   );
 
+  // Intentionally computed once at mount — fitView applies on initial render only
   const fitViewOptions = useMemo(
     () => ({ padding: window.innerWidth < 640 ? 0.3 : 0.1 }),
     []
