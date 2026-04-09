@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import ReactFlow, {
   Background,
   Controls,
@@ -16,6 +16,7 @@ import { useGameStore } from '../../store/useGameStore';
 import PositionNode from './PositionNode';
 import TransitionEdge from './TransitionEdge';
 import Legend from './Legend';
+import AddPositionModal from './AddPositionModal';
 
 const nodeTypes: NodeTypes = {
   positionNode: PositionNode,
@@ -29,6 +30,7 @@ const MindMap = () => {
   const {
     nodes,
     edges,
+    filterTags,
     onNodesChange,
     onEdgesChange,
     onConnect,
@@ -38,12 +40,29 @@ const MindMap = () => {
     loadFromStorage,
   } = useGameStore();
 
-  const reactFlowInstance = useReactFlow();
+  const { project } = useReactFlow();
+  const [pendingPosition, setPendingPosition] = useState<{ x: number; y: number } | null>(null);
 
   // Load data from storage on mount
   useEffect(() => {
     loadFromStorage();
   }, [loadFromStorage]);
+
+  // Filter nodes by selected tags (show all if no tags selected)
+  const visibleNodes = filterTags.length === 0
+    ? nodes
+    : nodes.filter((node) =>
+        node.data.tags.some((tag) => filterTags.includes(tag.id))
+      );
+
+  const visibleNodeIds = new Set(visibleNodes.map((n) => n.id));
+
+  // Hide edges whose source or target node is filtered out
+  const visibleEdges = filterTags.length === 0
+    ? edges
+    : edges.filter(
+        (edge) => visibleNodeIds.has(edge.source) && visibleNodeIds.has(edge.target)
+      );
 
   const onNodeClick = useCallback(
     (_event: React.MouseEvent, node: Node) => {
@@ -64,34 +83,51 @@ const MindMap = () => {
     setSelectedEdge(null);
   }, [setSelectedNode, setSelectedEdge]);
 
-  const onPaneDoubleClick = useCallback(
+  const onCanvasDoubleClick = useCallback(
     (event: React.MouseEvent) => {
-      const position = reactFlowInstance.screenToFlowPosition({
+      // Only trigger on the background pane, not on nodes or edges
+      const target = event.target as HTMLElement;
+      if (!target.classList.contains('react-flow__pane')) return;
+
+      // Convert screen coordinates to flow coordinates so position is
+      // accurate regardless of the current zoom/pan state.
+      const flowPosition = project({
         x: event.clientX,
         y: event.clientY,
       });
-      const label = prompt('Enter position name:');
-      if (label) {
-        addNode(position, label);
-      }
+      setPendingPosition(flowPosition);
     },
-    [addNode, reactFlowInstance]
+    [project]
   );
 
+  const handleModalConfirm = useCallback(
+    (label: string) => {
+      if (pendingPosition) {
+        addNode(pendingPosition, label);
+      }
+      setPendingPosition(null);
+    },
+    [addNode, pendingPosition]
+  );
+
+  const handleModalCancel = useCallback(() => {
+    setPendingPosition(null);
+  }, []);
+
   return (
-    <div className="h-full w-full">
+    <div className="h-full w-full" onDoubleClick={onCanvasDoubleClick}>
       <ReactFlow
-        nodes={nodes as Node[]}
-        edges={edges as Edge[]}
+        nodes={visibleNodes as Node[]}
+        edges={visibleEdges as Edge[]}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         onConnect={onConnect as OnConnect}
         onNodeClick={onNodeClick}
         onEdgeClick={onEdgeClick}
         onPaneClick={onPaneClick}
-        onDoubleClick={onPaneDoubleClick}
         nodeTypes={nodeTypes}
         edgeTypes={edgeTypes}
+        zoomOnDoubleClick={false}
         fitView
         attributionPosition="bottom-right"
       >
@@ -124,16 +160,23 @@ const MindMap = () => {
         />
         <Panel position="top-left" className="bg-white/80 backdrop-blur-sm p-3 rounded-lg shadow-lg">
           <div className="text-sm font-medium text-gray-700">
-            💡 Double-click canvas to add position
+            💡 Double-click canvas to add a BJJ position
           </div>
           <div className="text-xs text-gray-600 mt-1">
-            Drag from node handle to create connection
+            Drag from a node's edge to create a connection
           </div>
         </Panel>
         <Panel position="top-right">
           <Legend />
         </Panel>
       </ReactFlow>
+
+      {pendingPosition && (
+        <AddPositionModal
+          onConfirm={handleModalConfirm}
+          onCancel={handleModalCancel}
+        />
+      )}
     </div>
   );
 };

@@ -23,6 +23,7 @@
 .react-flow__handle {
   opacity: 0;
   transition: opacity 0.2s;
+  position: relative;
 }
 
 .react-flow__node:hover .react-flow__handle,
@@ -33,4 +34,15 @@
 /* While connecting, show all handles */
 .react-flow__node.connecting .react-flow__handle {
   opacity: 1;
+}
+
+/* Increase handle tap targets to 44px minimum per iOS/Android guidelines */
+.react-flow__handle::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  min-width: 44px;
+  min-height: 44px;
+  transform: translate(-50%, -50%);
 }

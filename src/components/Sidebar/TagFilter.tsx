@@ -22,7 +22,7 @@ const TagFilter = () => {
         {filterTags.length > 0 && (
           <button
             onClick={clearFilters}
-            className="text-xs text-blue-600 hover:text-blue-700"
+            className="text-xs text-blue-600 hover:text-blue-700 min-h-[44px] min-w-[44px]"
           >
             Clear
           </button>
@@ -35,7 +35,7 @@ const TagFilter = () => {
             <button
               key={tag.id}
               onClick={() => toggleTag(tag.id)}
-              className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
+              className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all min-h-[44px] min-w-[44px] ${
                 isActive
                   ? 'text-gray-800 ring-2 ring-offset-2 border border-gray-300'
                   : 'text-gray-700 bg-gray-100 hover:bg-gray-200'

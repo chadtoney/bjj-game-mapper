@@ -46,7 +46,7 @@ const NodeEditor = () => {
         <h3 className="font-semibold text-gray-800">Edit Position</h3>
         <button
           onClick={() => setSelectedNode(null)}
-          className="text-gray-600 hover:text-gray-800"
+          className="text-gray-600 hover:text-gray-800 min-h-[44px] min-w-[44px]"
         >
           ✕
         </button>
@@ -88,7 +88,7 @@ const NodeEditor = () => {
                 <button
                   key={tag.id}
                   onClick={() => toggleTag(tag.id)}
-                  className={`px-2 py-1 rounded text-xs font-medium transition-all ${
+                  className={`px-2 py-1 rounded text-xs font-medium transition-all min-h-[44px] min-w-[44px] ${
                     isSelected
                       ? 'text-gray-800 border border-gray-300'
                       : 'text-gray-700 bg-gray-100 hover:bg-gray-200'
