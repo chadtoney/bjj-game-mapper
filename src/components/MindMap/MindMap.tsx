@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import ReactFlow, {
   Background,
   Controls,
@@ -14,6 +14,8 @@ import 'reactflow/dist/style.css';
 import { useGameStore } from '../../store/useGameStore';
 import PositionNode from './PositionNode';
 import TransitionEdge from './TransitionEdge';
+import AddPositionModal from './AddPositionModal';
+import { useLongPress } from '../../hooks/useLongPress';
 
 const nodeTypes: NodeTypes = {
   positionNode: PositionNode,
@@ -60,28 +62,52 @@ const MindMap = () => {
     setSelectedEdge(null);
   }, [setSelectedNode, setSelectedEdge]);
 
-  const onPaneDoubleClick = useCallback(
-    (event: React.MouseEvent) => {
-      const reactFlowBounds = (event.target as HTMLElement)
+  // --- Long-press to add position ---
+  const [pendingPosition, setPendingPosition] = useState<{
+    x: number;
+    y: number;
+  } | null>(null);
+
+  const onLongPress = useCallback(
+    (e: React.PointerEvent) => {
+      // Only trigger on the background pane, not on nodes or edges
+      const target = e.target as HTMLElement;
+      if (!target.classList.contains('react-flow__pane')) return;
+
+      const reactFlowBounds = target
         .closest('.react-flow')
         ?.getBoundingClientRect();
 
       if (reactFlowBounds) {
-        const position = {
-          x: event.clientX - reactFlowBounds.left - 75,
-          y: event.clientY - reactFlowBounds.top - 25,
-        };
-        const label = prompt('Enter position name:');
-        if (label) {
-          addNode(position, label);
-        }
+        setPendingPosition({
+          x: e.clientX - reactFlowBounds.left - 75,
+          y: e.clientY - reactFlowBounds.top - 25,
+        });
       }
     },
-    [addNode]
+    [],
   );
 
+  const longPressHandlers = useLongPress(onLongPress);
+
+  const handleModalConfirm = useCallback(
+    (label: string) => {
+      if (pendingPosition) {
+        addNode(pendingPosition, label);
+      }
+      setPendingPosition(null);
+    },
+    [addNode, pendingPosition],
+  );
+
+  const handleModalCancel = useCallback(() => {
+    setPendingPosition(null);
+  }, []);
+
+  const existingLabels = nodes.map((n) => n.data.label);
+
   return (
-    <div className="h-full w-full">
+    <div className="h-full w-full" {...longPressHandlers}>
       <ReactFlow
         nodes={nodes as Node[]}
         edges={edges as Edge[]}
@@ -91,9 +117,9 @@ const MindMap = () => {
         onNodeClick={onNodeClick}
         onEdgeClick={onEdgeClick}
         onPaneClick={onPaneClick}
-        onDoubleClick={onPaneDoubleClick}
         nodeTypes={nodeTypes}
         edgeTypes={edgeTypes}
+        zoomOnDoubleClick={false}
         fitView
         attributionPosition="bottom-right"
       >
@@ -108,13 +134,21 @@ const MindMap = () => {
         />
         <Panel position="top-left" className="bg-white/80 backdrop-blur-sm p-3 rounded-lg shadow-lg">
           <div className="text-sm font-medium text-gray-700">
-            💡 Double-click canvas to add position
+            💡 Long-press canvas to add a BJJ position
           </div>
           <div className="text-xs text-gray-600 mt-1">
-            Drag from node edge to create connection
+            Drag from a node&apos;s edge to create a connection
           </div>
         </Panel>
       </ReactFlow>
+
+      {pendingPosition && (
+        <AddPositionModal
+          onConfirm={handleModalConfirm}
+          onCancel={handleModalCancel}
+          existingLabels={existingLabels}
+        />
+      )}
     </div>
   );
 };

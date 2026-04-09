@@ -10,7 +10,7 @@ A web-based Brazilian Jiu-Jitsu game mind mapping application that allows users 
 - Create nodes representing BJJ positions (Guard, Mount, Side Control, Back Control, etc.)
 - Visual node-based interface using React Flow
 - Drag-and-drop functionality for positioning nodes
-- Double-click canvas to create new position nodes
+- Long-press canvas to create new position nodes with suggestion dropdown
 - 11 default BJJ positions included to get you started
 
 ### 🔄 Position Transitions
@@ -112,8 +112,8 @@ npm run preview
 ## How to Use
 
 ### Creating Positions
-1. **Double-click** anywhere on the canvas to create a new position
-2. Enter a name for the position in the prompt
+1. **Long-press** (press and hold) anywhere on the canvas to add a new position
+2. Enter a name or pick from the suggestion dropdown of common BJJ positions
 3. The position will appear as a node on the canvas
 
 ### Editing Positions
