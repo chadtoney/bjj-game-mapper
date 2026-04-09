@@ -13,7 +13,8 @@ interface ContextMenuProps {
   onClose: () => void;
 }
 
-const RADIUS = 70; // distance from centre to each item
+const RADIUS = 70; // distance from center to each item
+const DOT_SIZE = 12; // px – size of the center dot
 
 const ContextMenu = ({ x, y, items, onClose }: ContextMenuProps) => {
   const ref = useRef<HTMLDivElement>(null);
@@ -46,10 +47,10 @@ const ContextMenu = ({ x, y, items, onClose }: ContextMenuProps) => {
       className="context-menu-overlay"
       style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', zIndex: 1000 }}
     >
-      {/* Centre dot */}
+      {/* Center dot */}
       <div
         className="absolute w-3 h-3 rounded-full bg-blue-400 opacity-60"
-        style={{ left: x - 6, top: y - 6 }}
+        style={{ left: x - DOT_SIZE / 2, top: y - DOT_SIZE / 2 }}
       />
 
       {items.map((item, i) => {
