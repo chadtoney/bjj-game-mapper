@@ -8,9 +8,9 @@ import { DEFAULT_POSITIONS } from '../utils/defaultPositions';
 const MAX_UNDO_STACK = 10;
 
 const takeSnapshot = (state: { nodes: PositionNode[]; edges: TransitionEdge[]; tags: typeof DEFAULT_TAGS }): UndoSnapshot => ({
-  nodes: JSON.parse(JSON.stringify(state.nodes)),
-  edges: JSON.parse(JSON.stringify(state.edges)),
-  tags: JSON.parse(JSON.stringify(state.tags)),
+  nodes: structuredClone(state.nodes),
+  edges: structuredClone(state.edges),
+  tags: structuredClone(state.tags),
 });
 
 export const useGameStore = create<GameMapState & {

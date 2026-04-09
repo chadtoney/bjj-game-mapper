@@ -8,16 +8,16 @@ const UndoRedo = () => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.ctrlKey || e.metaKey) && e.key === 'z' && !e.shiftKey) {
         e.preventDefault();
-        undo();
+        if (canUndo()) undo();
       }
       if ((e.ctrlKey || e.metaKey) && ((e.key === 'z' && e.shiftKey) || e.key === 'y')) {
         e.preventDefault();
-        redo();
+        if (canRedo()) redo();
       }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [undo, redo]);
+  }, [undo, redo, canUndo, canRedo]);
 
   return (
     <div className="fixed bottom-4 left-1/2 -translate-x-1/2 flex gap-2 bg-white p-2 rounded-lg shadow-lg border border-gray-200">
