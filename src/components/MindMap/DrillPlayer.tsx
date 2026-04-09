@@ -154,14 +154,17 @@ const DrillPlayer = () => {
             {currentNode?.data.description && (
               <div className="text-xs text-gray-500 mt-1">{currentNode.data.description}</div>
             )}
-            {nextNodeId && (
-              <div className="text-xs text-gray-400 mt-1">
-                Next: {getNodeLabel(nextNodeId)}
-                {getEdgeTechnique(currentNodeId, nextNodeId) && (
-                  <span className="text-blue-400"> ({getEdgeTechnique(currentNodeId, nextNodeId)})</span>
-                )}
-              </div>
-            )}
+            {nextNodeId && (() => {
+              const nextTechnique = getEdgeTechnique(currentNodeId, nextNodeId);
+              return (
+                <div className="text-xs text-gray-400 mt-1">
+                  Next: {getNodeLabel(nextNodeId)}
+                  {nextTechnique && (
+                    <span className="text-blue-400"> ({nextTechnique})</span>
+                  )}
+                </div>
+              );
+            })()}
           </div>
 
           {/* Next button */}

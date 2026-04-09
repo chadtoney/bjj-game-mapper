@@ -198,7 +198,11 @@ export const useGameStore = create<GameMapState & {
   },
 
   setDrillStep: (index) => {
-    set({ drillStepIndex: index });
+    const { activeDrillId, drillSequences } = get();
+    const drill = drillSequences.find((d) => d.id === activeDrillId);
+    if (drill && index >= 0 && index < drill.nodeIds.length) {
+      set({ drillStepIndex: index });
+    }
   },
 
   setTrainingMode: (enabled) => {
