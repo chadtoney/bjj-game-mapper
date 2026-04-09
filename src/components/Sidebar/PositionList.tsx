@@ -65,7 +65,7 @@ const PositionList = () => {
         ))}
         {nodes.length === 0 && (
           <div className="text-center text-gray-500 text-sm py-8">
-            No positions yet. Double-click the canvas to add one.
+            No positions yet. Tap + hold the canvas to add one.
           </div>
         )}
       </div>

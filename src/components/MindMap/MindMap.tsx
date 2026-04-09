@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import ReactFlow, {
   Background,
   Controls,
@@ -14,6 +14,8 @@ import 'reactflow/dist/style.css';
 import { useGameStore } from '../../store/useGameStore';
 import PositionNode from './PositionNode';
 import TransitionEdge from './TransitionEdge';
+import OnboardingOverlay from './OnboardingOverlay';
+import { hasCompletedOnboarding } from '../../utils/onboarding';
 
 const nodeTypes: NodeTypes = {
   positionNode: PositionNode,
@@ -35,6 +37,7 @@ const MindMap = () => {
     addNode,
     loadFromStorage,
   } = useGameStore();
+  const [showOnboarding, setShowOnboarding] = useState(() => !hasCompletedOnboarding());
 
   // Load data from storage on mount
   useEffect(() => {
@@ -106,15 +109,20 @@ const MindMap = () => {
           }}
           className="!bg-gray-50 !border-gray-300"
         />
-        <Panel position="top-left" className="bg-white/80 backdrop-blur-sm p-3 rounded-lg shadow-lg">
-          <div className="text-sm font-medium text-gray-700">
-            💡 Double-click canvas to add position
-          </div>
-          <div className="text-xs text-gray-600 mt-1">
-            Drag from node edge to create connection
-          </div>
-        </Panel>
+        {!showOnboarding && (
+          <Panel position="top-left" className="bg-white/80 backdrop-blur-sm p-3 rounded-lg shadow-lg">
+            <div className="text-sm font-medium text-gray-700">
+              💡 Tap + hold canvas to add position
+            </div>
+            <div className="text-xs text-gray-600 mt-1">
+              Drag between positions to add a technique
+            </div>
+          </Panel>
+        )}
       </ReactFlow>
+      {showOnboarding && (
+        <OnboardingOverlay onComplete={() => setShowOnboarding(false)} />
+      )}
     </div>
   );
 };
