@@ -1,9 +1,10 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import ReactFlow, {
   Background,
   Controls,
   MiniMap,
   Panel,
+  useReactFlow,
   type NodeTypes,
   type EdgeTypes,
   type Node,
@@ -40,6 +41,17 @@ const MindMap = () => {
   useEffect(() => {
     loadFromStorage();
   }, [loadFromStorage]);
+
+  const { fitView } = useReactFlow();
+
+  // Auto-zoom-to-fit when opening on small screens
+  useEffect(() => {
+    if (window.innerWidth < 640 && nodes.length > 0) {
+      // Small delay so ReactFlow can finish layout
+      const timer = setTimeout(() => fitView({ padding: 0.3 }), 200);
+      return () => clearTimeout(timer);
+    }
+  }, [fitView, nodes.length]);
 
   const onNodeClick = useCallback(
     (_event: React.MouseEvent, node: Node) => {
@@ -80,6 +92,11 @@ const MindMap = () => {
     [addNode]
   );
 
+  const fitViewOptions = useMemo(
+    () => ({ padding: window.innerWidth < 640 ? 0.3 : 0.1 }),
+    []
+  );
+
   return (
     <div className="h-full w-full">
       <ReactFlow
@@ -95,6 +112,7 @@ const MindMap = () => {
         nodeTypes={nodeTypes}
         edgeTypes={edgeTypes}
         fitView
+        fitViewOptions={fitViewOptions}
         attributionPosition="bottom-right"
       >
         <Background />

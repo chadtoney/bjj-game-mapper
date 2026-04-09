@@ -5,14 +5,14 @@ import type { PositionNode } from '../../types';
 const PositionNodeComponent = ({ data, selected }: NodeProps<PositionNode['data']>) => {
   return (
     <div
-      className={`px-4 py-3 rounded-lg border-2 bg-white shadow-md min-w-[150px] ${
+      className={`px-2 py-2 sm:px-4 sm:py-3 rounded-lg border-2 bg-white shadow-md min-w-[100px] sm:min-w-[150px] ${
         selected ? 'border-blue-500 ring-2 ring-blue-300' : 'border-gray-300'
       }`}
     >
       <Handle type="target" position={Position.Top} className="!bg-gray-400" />
       
       <div className="flex flex-col gap-1">
-        <div className="font-semibold text-gray-800 text-sm">{data.label}</div>
+        <div className="font-bold sm:font-semibold text-gray-800 text-xs sm:text-sm">{data.label}</div>
         
         {data.description && (
           <div className="text-xs text-gray-600 mt-1">{data.description}</div>
