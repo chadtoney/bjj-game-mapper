@@ -1,7 +1,10 @@
+import { useState } from 'react';
 import { useGameStore } from '../../store/useGameStore';
+import AddPositionModal from '../MindMap/AddPositionModal';
 
 const PositionList = () => {
-  const { nodes, selectedNodeId, setSelectedNode, deleteNode } = useGameStore();
+  const { nodes, selectedNodeId, setSelectedNode, deleteNode, addNode } = useGameStore();
+  const [showAddModal, setShowAddModal] = useState(false);
 
   const handleDelete = (id: string, e: React.MouseEvent) => {
     e.stopPropagation();
@@ -10,9 +13,25 @@ const PositionList = () => {
     }
   };
 
+  const handleAddConfirm = (label: string) => {
+    // Place new nodes in a staggered grid so they don't overlap
+    const offset = nodes.length * 30;
+    addNode({ x: 100 + offset, y: 100 + offset }, label);
+    setShowAddModal(false);
+  };
+
   return (
     <div className="space-y-2">
-      <h3 className="font-semibold text-gray-800 mb-3">Positions ({nodes.length})</h3>
+      <div className="flex items-center justify-between mb-3">
+        <h3 className="font-semibold text-gray-800">Positions ({nodes.length})</h3>
+        <button
+          onClick={() => setShowAddModal(true)}
+          className="flex items-center gap-1 px-2 py-1 text-xs font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors"
+          title="Add a new BJJ position"
+        >
+          + Add
+        </button>
+      </div>
       <div className="space-y-2 max-h-64 overflow-y-auto">
         {nodes.map((node) => (
           <div
@@ -65,10 +84,17 @@ const PositionList = () => {
         ))}
         {nodes.length === 0 && (
           <div className="text-center text-gray-500 text-sm py-8">
-            No positions yet. Double-click the canvas to add one.
+            No positions yet. Click <strong>+ Add</strong> or double-click the canvas.
           </div>
         )}
       </div>
+
+      {showAddModal && (
+        <AddPositionModal
+          onConfirm={handleAddConfirm}
+          onCancel={() => setShowAddModal(false)}
+        />
+      )}
     </div>
   );
 };
