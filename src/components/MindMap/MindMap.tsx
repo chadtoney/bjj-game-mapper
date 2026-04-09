@@ -14,6 +14,7 @@ import 'reactflow/dist/style.css';
 import { useGameStore } from '../../store/useGameStore';
 import PositionNode from './PositionNode';
 import TransitionEdge from './TransitionEdge';
+import DrillPlayer from './DrillPlayer';
 
 const nodeTypes: NodeTypes = {
   positionNode: PositionNode,
@@ -115,6 +116,7 @@ const MindMap = () => {
           </div>
         </Panel>
       </ReactFlow>
+      <DrillPlayer />
     </div>
   );
 };

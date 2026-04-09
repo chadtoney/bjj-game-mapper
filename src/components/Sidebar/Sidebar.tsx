@@ -4,6 +4,7 @@ import PositionList from './PositionList';
 import TagFilter from './TagFilter';
 import NodeEditor from './NodeEditor';
 import EdgeEditor from './EdgeEditor';
+import DrillBuilder from './DrillBuilder';
 
 const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -47,6 +48,9 @@ const Sidebar = () => {
         {!selectedNodeId && !selectedEdgeId && (
           <>
             <TagFilter />
+            <div className="border-t border-gray-200 pt-4">
+              <DrillBuilder />
+            </div>
             <div className="border-t border-gray-200 pt-4">
               <PositionList />
             </div>

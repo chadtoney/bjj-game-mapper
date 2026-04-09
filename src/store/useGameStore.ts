@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { addEdge as addReactFlowEdge, applyNodeChanges, applyEdgeChanges, type NodeChange, type EdgeChange, type Edge, type Connection } from 'reactflow';
-import type { GameMapState, PositionNode, TransitionEdge } from '../types';
+import type { GameMapState, PositionNode, TransitionEdge, DrillSequence } from '../types';
 import { DEFAULT_TAGS } from '../types';
 import { saveToLocalStorage, loadFromLocalStorage, exportToJSON, importFromJSON } from '../utils/storage';
 import { DEFAULT_POSITIONS } from '../utils/defaultPositions';
@@ -16,6 +16,12 @@ export const useGameStore = create<GameMapState & {
   selectedNodeId: null,
   selectedEdgeId: null,
   filterTags: [],
+
+  // Training mode state
+  drillSequences: [],
+  activeDrillId: null,
+  drillStepIndex: 0,
+  isTrainingMode: false,
 
   // React Flow handlers
   onNodesChange: (changes: NodeChange[]) => {
@@ -147,10 +153,65 @@ export const useGameStore = create<GameMapState & {
     set({ filterTags: tags });
   },
 
+  // Training mode actions
+  addDrillSequence: (name, nodeIds) => {
+    const newDrill: DrillSequence = {
+      id: `drill-${Date.now()}`,
+      name,
+      nodeIds,
+    };
+    set({ drillSequences: [...get().drillSequences, newDrill] });
+    get().saveToStorage();
+  },
+
+  deleteDrillSequence: (id) => {
+    const state = get();
+    set({
+      drillSequences: state.drillSequences.filter((d) => d.id !== id),
+      activeDrillId: state.activeDrillId === id ? null : state.activeDrillId,
+      drillStepIndex: state.activeDrillId === id ? 0 : state.drillStepIndex,
+    });
+    get().saveToStorage();
+  },
+
+  startDrill: (drillId) => {
+    set({ activeDrillId: drillId, drillStepIndex: 0, isTrainingMode: true });
+  },
+
+  stopDrill: () => {
+    set({ activeDrillId: null, drillStepIndex: 0, isTrainingMode: false });
+  },
+
+  drillNext: () => {
+    const { activeDrillId, drillStepIndex, drillSequences } = get();
+    const drill = drillSequences.find((d) => d.id === activeDrillId);
+    if (drill && drillStepIndex < drill.nodeIds.length - 1) {
+      set({ drillStepIndex: drillStepIndex + 1 });
+    }
+  },
+
+  drillPrev: () => {
+    const { drillStepIndex } = get();
+    if (drillStepIndex > 0) {
+      set({ drillStepIndex: drillStepIndex - 1 });
+    }
+  },
+
+  setDrillStep: (index) => {
+    set({ drillStepIndex: index });
+  },
+
+  setTrainingMode: (enabled) => {
+    set({ isTrainingMode: enabled });
+    if (!enabled) {
+      set({ activeDrillId: null, drillStepIndex: 0 });
+    }
+  },
+
   // Persistence actions
   exportData: () => {
-    const { nodes, edges, tags } = get();
-    return exportToJSON({ nodes, edges, tags });
+    const { nodes, edges, tags, drillSequences } = get();
+    return exportToJSON({ nodes, edges, tags, drillSequences });
   },
 
   importData: (data) => {
@@ -161,6 +222,7 @@ export const useGameStore = create<GameMapState & {
           nodes: parsed.nodes || [],
           edges: parsed.edges || [],
           tags: parsed.tags || DEFAULT_TAGS,
+          drillSequences: parsed.drillSequences || [],
         });
         get().saveToStorage();
       }
@@ -176,6 +238,7 @@ export const useGameStore = create<GameMapState & {
         nodes: stored.nodes || [],
         edges: stored.edges || [],
         tags: stored.tags || DEFAULT_TAGS,
+        drillSequences: stored.drillSequences || [],
       });
     } else {
       // Initialize with default positions
@@ -183,13 +246,13 @@ export const useGameStore = create<GameMapState & {
         ...pos,
         id: `default-${idx}`,
       }));
-      set({ nodes: defaultNodes, edges: [], tags: DEFAULT_TAGS });
+      set({ nodes: defaultNodes, edges: [], tags: DEFAULT_TAGS, drillSequences: [] });
       get().saveToStorage();
     }
   },
 
   saveToStorage: () => {
-    const { nodes, edges, tags } = get();
-    saveToLocalStorage({ nodes, edges, tags });
+    const { nodes, edges, tags, drillSequences } = get();
+    saveToLocalStorage({ nodes, edges, tags, drillSequences });
   },
 }));

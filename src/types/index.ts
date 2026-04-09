@@ -33,6 +33,13 @@ export type TransitionEdge = Edge & {
   };
 };
 
+// Drill sequence for training mode
+export interface DrillSequence {
+  id: string;
+  name: string;
+  nodeIds: string[];
+}
+
 // Store state interface
 export interface GameMapState {
   nodes: PositionNode[];
@@ -41,6 +48,12 @@ export interface GameMapState {
   selectedNodeId: string | null;
   selectedEdgeId: string | null;
   filterTags: string[];
+  
+  // Training mode state
+  drillSequences: DrillSequence[];
+  activeDrillId: string | null;
+  drillStepIndex: number;
+  isTrainingMode: boolean;
   
   // Node actions
   addNode: (position: { x: number; y: number }, label: string) => void;
@@ -64,6 +77,16 @@ export interface GameMapState {
   
   // Filter actions
   setFilterTags: (tags: string[]) => void;
+  
+  // Training mode actions
+  addDrillSequence: (name: string, nodeIds: string[]) => void;
+  deleteDrillSequence: (id: string) => void;
+  startDrill: (drillId: string) => void;
+  stopDrill: () => void;
+  drillNext: () => void;
+  drillPrev: () => void;
+  setDrillStep: (index: number) => void;
+  setTrainingMode: (enabled: boolean) => void;
   
   // Persistence actions
   exportData: () => string;

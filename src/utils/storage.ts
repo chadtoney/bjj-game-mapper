@@ -1,4 +1,4 @@
-import type { PositionNode, TransitionEdge, Tag } from '../types';
+import type { PositionNode, TransitionEdge, Tag, DrillSequence } from '../types';
 
 const STORAGE_KEY = 'bjj-game-mapper-data';
 
@@ -6,6 +6,7 @@ export interface StorageData {
   nodes: PositionNode[];
   edges: TransitionEdge[];
   tags: Tag[];
+  drillSequences?: DrillSequence[];
 }
 
 export const saveToLocalStorage = (data: StorageData): void => {
