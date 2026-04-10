@@ -3,7 +3,7 @@ import { addEdge as addReactFlowEdge, applyNodeChanges, applyEdgeChanges, type N
 import type { GameMapState, PositionNode, TransitionEdge } from '../types';
 import { DEFAULT_TAGS } from '../types';
 import { saveToLocalStorage, loadFromLocalStorage, exportToJSON, importFromJSON } from '../utils/storage';
-import { DEFAULT_POSITIONS } from '../utils/defaultPositions';
+import { DEFAULT_POSITIONS, DEFAULT_EDGES } from '../utils/defaultPositions';
 
 export const useGameStore = create<GameMapState & {
   onNodesChange: (changes: NodeChange[]) => void;
@@ -178,12 +178,16 @@ export const useGameStore = create<GameMapState & {
         tags: stored.tags || DEFAULT_TAGS,
       });
     } else {
-      // Initialize with default positions
+      // Initialize with default positions and edges
       const defaultNodes: PositionNode[] = DEFAULT_POSITIONS.map((pos, idx) => ({
         ...pos,
         id: `default-${idx}`,
       }));
-      set({ nodes: defaultNodes, edges: [], tags: DEFAULT_TAGS });
+      const defaultEdges: TransitionEdge[] = DEFAULT_EDGES.map((edge, idx) => ({
+        ...edge,
+        id: `default-edge-${idx}`,
+      }));
+      set({ nodes: defaultNodes, edges: defaultEdges, tags: DEFAULT_TAGS });
       get().saveToStorage();
     }
   },

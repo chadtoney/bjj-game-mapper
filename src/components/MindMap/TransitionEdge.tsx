@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { type EdgeProps, getBezierPath, BaseEdge } from 'reactflow';
+import { type EdgeProps, getBezierPath, BaseEdge, EdgeLabelRenderer } from 'reactflow';
 
 const TransitionEdge = ({
   id,
@@ -21,33 +21,34 @@ const TransitionEdge = ({
     targetPosition,
   });
 
-  const edgeColor = selected ? '#3B82F6' : data?.tags?.[0]?.color || '#6B7280';
+  const edgeColor = selected ? '#3B82F6' : '#6B7280';
 
   return (
     <>
       <BaseEdge
         id={id}
         path={edgePath}
+        markerEnd="url(#arrowhead)"
         style={{
           stroke: edgeColor,
           strokeWidth: selected ? 3 : 2,
         }}
       />
       {data?.technique && (
-        <foreignObject
-          width={120}
-          height={40}
-          x={labelX - 60}
-          y={labelY - 20}
-          className="overflow-visible"
-          requiredExtensions="http://www.w3.org/1999/xhtml"
-        >
-          <div className="flex items-center justify-center">
-            <div className="bg-white px-2 py-1 rounded border border-gray-300 text-xs font-medium text-gray-700 shadow-sm">
+        <EdgeLabelRenderer>
+          <div
+            style={{
+              position: 'absolute',
+              transform: `translate(-50%, -50%) translate(${labelX}px,${labelY}px)`,
+              pointerEvents: 'all',
+            }}
+            className="nodrag nopan"
+          >
+            <div className="bg-white px-2 py-1 rounded border border-gray-300 text-xs font-medium text-gray-700 shadow-sm whitespace-nowrap">
               {data.technique}
             </div>
           </div>
-        </foreignObject>
+        </EdgeLabelRenderer>
       )}
     </>
   );

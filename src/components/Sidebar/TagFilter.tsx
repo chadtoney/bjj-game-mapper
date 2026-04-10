@@ -37,7 +37,7 @@ const TagFilter = () => {
               onClick={() => toggleTag(tag.id)}
               className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all min-h-[44px] min-w-[44px] ${
                 isActive
-                  ? 'text-white ring-2 ring-offset-2'
+                  ? 'text-gray-800 ring-2 ring-offset-2 border border-gray-300'
                   : 'text-gray-700 bg-gray-100 hover:bg-gray-200'
               }`}
               style={

@@ -15,6 +15,7 @@ import 'reactflow/dist/style.css';
 import { useGameStore } from '../../store/useGameStore';
 import PositionNode from './PositionNode';
 import TransitionEdge from './TransitionEdge';
+import Legend from './Legend';
 import AddPositionModal from './AddPositionModal';
 
 const nodeTypes: NodeTypes = {
@@ -130,11 +131,29 @@ const MindMap = () => {
         fitView
         attributionPosition="bottom-right"
       >
+        {/* SVG arrow marker definition */}
+        <svg>
+          <defs>
+            <marker
+              id="arrowhead"
+              viewBox="0 0 10 10"
+              refX="10"
+              refY="5"
+              markerWidth="8"
+              markerHeight="8"
+              orient="auto-start-reverse"
+            >
+              <path d="M 0 0 L 10 5 L 0 10 Z" fill="#6B7280" />
+            </marker>
+          </defs>
+        </svg>
         <Background />
         <Controls />
         <MiniMap
           nodeColor={(node) => {
             if (node.selected) return '#3B82F6';
+            const data = node.data as { tags?: { color: string }[] };
+            if (data?.tags?.[0]?.color) return data.tags[0].color;
             return '#E5E7EB';
           }}
           className="!bg-gray-50 !border-gray-300"
@@ -146,6 +165,9 @@ const MindMap = () => {
           <div className="text-xs text-gray-600 mt-1">
             Drag from a node's edge to create a connection
           </div>
+        </Panel>
+        <Panel position="top-right">
+          <Legend />
         </Panel>
       </ReactFlow>
 
